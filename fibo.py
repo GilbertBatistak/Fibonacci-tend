@@ -1,16 +1,19 @@
-def Fibonacci(n): 
-    if n<0: 
-        print("Incorrect input") 
-    # First Fibonacci number is 0 
-    elif n==1: 
-        return 0
-    # Second Fibonacci number is 1 
-    elif n==2: 
-        return 1
-    else: 
-        return Fibonacci(n-1)+Fibonacci(n-2) 
-  
-# Driver Program 
-print("Insert number")
-n = int(input())
-print(Fibonacci(n)) 
+def main(req: func.HttpRequest) -> func.HttpResponse:
+    logging.info('Python HTTP trigger function processed a request.')
+
+    name = req.params.get('name')
+    if not name:
+        try:
+            req_body = req.get_json()
+        except ValueError:
+            pass
+        else:
+            name = req_body.get('name')
+
+    if name:
+        return func.HttpResponse(f"Hello {name}!")
+    else:
+        return func.HttpResponse(
+             "Please pass a name on the query string or in the request body",
+             status_code=400
+        )
